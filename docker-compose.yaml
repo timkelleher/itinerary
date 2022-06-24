@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    container_name: itinerary_app
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_SERVER: itinerary_db
+      MYSQL_USER: itinerary
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: itinerary
+    ports:
+      - '3000:3000'
+    depends_on:
+      - itinerary_db
+    restart: unless-stopped
+  db:
+    container_name: itinerary_db
+    image: lscr.io/linuxserver/mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: itinerary
+      MYSQL_USER: itinerary
+      MYSQL_PASSWORD: password
+    ports:
+      - '3306:3306'
+    volumes:
+      - './data/db/data:/config'
