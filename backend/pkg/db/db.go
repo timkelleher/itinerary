@@ -187,7 +187,27 @@ func (db *DB) UpdateCollection(c *models.Collection) error {
 		}).Error("Update Collection")
 	}
 
+	db.updateCollectionPathPrefix(uint(c.ID))
+
 	return err
+}
+
+func (db *DB) updateCollectionPathPrefix(id uint) error {
+	collection, err := db.Collection(id)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error": err.Error(),
+		}).Error("Update Collection Path Prefix")
+		return err
+	}
+
+	for _, endpoint := range collection.Endpoints {
+		endpoint.Collection = collection
+		endpoint.ComputedPath = endpoint.ComputePath()
+		db.UpdateEndpoint(endpoint)
+	}
+
+	return nil
 }
 
 // updateCollections
@@ -231,10 +251,8 @@ func (db *DB) EndpointFromPath(path, method string) (*models.Endpoint, error) {
 	sqlParams = append(sqlParams, path)
 	requireMethodClause := ""
 	method = strings.ToUpper(method)
-	if method != "ANY" {
-		sqlParams = append(sqlParams, method)
-		requireMethodClause = " AND endpoints.method = ?"
-	}
+	sqlParams = append(sqlParams, method)
+	requireMethodClause = " AND (endpoints.method = ? OR endpoints.method = \"\")"
 
 	var endpoint models.Endpoint
 	sql := "SELECT endpoints.*, collections.path_prefix" +

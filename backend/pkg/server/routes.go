@@ -269,7 +269,11 @@ func customEndpointRoute(c *gin.Context) {
 		return
 	}
 
-	var output map[string]interface{}
-	json.Unmarshal([]byte(endpoint.Output), &output)
-	c.JSON(status, output)
+	if endpoint.Collection.ContentType == "JSON" {
+		var output map[string]interface{}
+		json.Unmarshal([]byte(endpoint.Output), &output)
+		c.JSON(status, output)
+	} else {
+		c.String(status, endpoint.Output)
+	}
 }
