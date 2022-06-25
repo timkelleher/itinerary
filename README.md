@@ -8,11 +8,13 @@ Two common use cases for Itinerary:
 - End-to-end testing where you can easily provide mock data from a real service
 
 ## Running
-Run Itinerary via docker compose:
+Run Itinerary via docker:
 
 ```
-docker compose up -d
+./buildDocker.sh
 ```
+
+Once a Docker image is published publicly only a simple docker compose will be necessary.
 
 Visit localhost:3000 to start using Itinerary.
 
