@@ -8,13 +8,11 @@ Two common use cases for Itinerary:
 - End-to-end testing where you can easily provide mock data from a real service
 
 ## Running
-Run Itinerary via docker:
+Run Itinerary via docker compose:
 
 ```
-./buildDocker.sh
+docker compose up -d
 ```
-
-Once a Docker image is published publicly only a simple docker compose will be necessary.
 
 Visit localhost:3000 to start using Itinerary.
 
@@ -54,6 +52,14 @@ http localhost:3000/health
 ```
 
 ### Frontend
+
+Itinerary runs Vue 3.  You will need vue-cli to run the frontend.
+
+```
+brew install vue-cli
+```
+
+After vue-clie is installed, you can start the frontend service:
 
 ```
 cd frontend
